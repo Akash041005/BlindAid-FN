@@ -1,46 +1,51 @@
 const BACKEND_URL = "https://blindaid-bc-production.up.railway.app";
+const userId = "akash_001"; // SAME ID as Pi
 
-const sosBtn = document.getElementById("sosBtn");
+let locationSent = false;
+let pollingStarted = true;
+
 const statusText = document.getElementById("status");
+statusText.innerText = "🟢 Waiting for emergency...";
 
-sosBtn.addEventListener("click", async () => {
-  const userId = document.getElementById("userId").value.trim();
+// poll backend every 3 seconds
+setInterval(async () => {
+  if (!pollingStarted || locationSent) return;
 
-  if (!userId) {
-    alert("Please enter your ID");
-    return;
-  }
+  try {
+    const res = await fetch(`${BACKEND_URL}/status/${userId}`);
+    const data = await res.json();
 
-  statusText.innerText = "🚨 Sending emergency...";
+    if (data.active && !data.locationReceived) {
+      statusText.innerText = "🚨 Emergency detected. Sending location...";
 
-  // 1️⃣ Trigger emergency
-  await fetch(`${BACKEND_URL}/emergency`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId })
-  });
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          await fetch(`${BACKEND_URL}/location`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude
+            })
+          });
 
-  // 2️⃣ Get GPS location
-  if (!navigator.geolocation) {
-    statusText.innerText = "❌ GPS not supported";
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      await fetch(`${BACKEND_URL}/location`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, lat, lng })
-      });
-
-      statusText.innerText = "✅ SOS sent successfully";
-    },
-    () => {
-      statusText.innerText = "❌ Location permission denied";
+          locationSent = true;
+          statusText.innerText = "📍 Location sent automatically";
+        },
+        () => {
+          statusText.innerText = "❌ Location permission denied";
+        }
+      );
     }
-  );
-});
+
+    // reset when emergency ends (for next time)
+    if (!data.active && locationSent) {
+      locationSent = false;
+      statusText.innerText = "🟢 Waiting for emergency...";
+    }
+
+  } catch (e) {
+    console.log("Polling error");
+  }
+}, 3000);
