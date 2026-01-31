@@ -1,0 +1,123 @@
+/* ---------- RESET ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------- BODY ---------- */
+body {
+  min-height: 100vh;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.container {
+  width: 100%;
+  max-width: 400px;
+  background: #020617;
+  padding: 28px 20px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
+}
+
+/* ---------- TEXT ---------- */
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 22px;
+  line-height: 1.4;
+}
+
+/* ---------- INPUT ---------- */
+input {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+/* ---------- BUTTON ---------- */
+button {
+  width: 100%;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* ---------- STATUS TEXT ---------- */
+#status {
+  margin-top: 18px;
+  font-size: 14px;
+  min-height: 18px;
+}
+
+/* ======================================================
+   DESKTOP / TABLET ENHANCEMENTS
+   ====================================================== */
+@media (min-width: 768px) {
+
+  body {
+    background: radial-gradient(circle at top, #1e293b, #020617);
+  }
+
+  .container {
+    max-width: 520px;
+    padding: 40px 32px;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 26px;
+  }
+
+  input {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  button {
+    font-size: 20px;
+    padding: 20px;
+  }
+
+  button:hover {
+    background: #b91c1c;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    transform: scale(1.03);
+  }
+
+  #status {
+    font-size: 15px;
+  }
+}
